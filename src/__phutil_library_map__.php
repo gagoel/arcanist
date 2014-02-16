@@ -135,6 +135,7 @@ phutil_register_library_map(array(
     'ArcanistScriptAndRegexLinter' => 'lint/linter/ArcanistScriptAndRegexLinter.php',
     'ArcanistSetConfigWorkflow' => 'workflow/ArcanistSetConfigWorkflow.php',
     'ArcanistSettings' => 'configuration/ArcanistSettings.php',
+    'ArcanistSetupProjectWorkflow' => 'workflow/ArcanistSetupProjectWorkflow.php',
     'ArcanistShellCompleteWorkflow' => 'workflow/ArcanistShellCompleteWorkflow.php',
     'ArcanistSingleLintEngine' => 'lint/engine/ArcanistSingleLintEngine.php',
     'ArcanistSpellingDefaultData' => 'lint/linter/spelling/ArcanistSpellingDefaultData.php',
@@ -186,6 +187,8 @@ phutil_register_library_map(array(
   ),
   'function' =>
   array(
+    'setupproject_download_progress' => 'workflow/ArcanistSetupProjectWorkflow.php',
+    'setupproject_format_bytes' => 'workflow/ArcanistSetupProjectWorkflow.php',
   ),
   'xmap' =>
   array(
@@ -285,6 +288,7 @@ phutil_register_library_map(array(
     'ArcanistScalaSBTLinter' => 'ArcanistLinter',
     'ArcanistScriptAndRegexLinter' => 'ArcanistLinter',
     'ArcanistSetConfigWorkflow' => 'ArcanistBaseWorkflow',
+    'ArcanistSetupProjectWorkflow' => 'ArcanistBaseWorkflow',
     'ArcanistShellCompleteWorkflow' => 'ArcanistBaseWorkflow',
     'ArcanistSingleLintEngine' => 'ArcanistLintEngine',
     'ArcanistSpellingLinter' => 'ArcanistLinter',
