@@ -187,8 +187,8 @@ phutil_register_library_map(array(
   ),
   'function' =>
   array(
-    'setupproject_download_progress' => 'workflow/ArcanistSetupProjectWorkflow.php',
-    'setupproject_format_bytes' => 'workflow/ArcanistSetupProjectWorkflow.php',
+    'curl_show_download_progress' => 'workflow/ArcanistUtils.php',
+    'format_bytes' => 'workflow/ArcanistUtils.php',
   ),
   'xmap' =>
   array(

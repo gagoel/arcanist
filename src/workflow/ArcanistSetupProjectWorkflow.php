@@ -4,6 +4,7 @@
  * Setup project working environment.
  *
 */
+require_once 'ArcanistUtils.php';
 
 final class ArcanistSetupProjectWorkflow extends ArcanistBaseWorkflow {
     
@@ -48,12 +49,16 @@ EOTEXT
 
     $setup_packages = $this->getConfigurationManager()
       ->getConfigFromAnySource('setup.packages');
-    
-    foreach($setup_packages as $key => $value) {
-        echo "Starting '" . $key . "' package setup...\n";
-        $this->setup_package($key, $value);
-        echo "'" . $key . "' package setup completed successfully.\n";
+
+    if ($setup_packages) {
+      foreach ($setup_packages as $key => $value) {
+          echo "Starting '" . $key . "' package setup...\n";
+          $this->setup_package($key, $value);
+          echo "'" . $key . "' package setup completed successfully.\n";
+      }
     }
+
+    echo "Setup completed.\n";
   }
   
   private function setup_package($pkg_name, $pkg_properties) {
@@ -127,7 +132,7 @@ EOTEXT
         curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
         curl_setopt($ch, CURLOPT_FAILONERROR, true);
         curl_setopt($ch, CURLOPT_PROGRESSFUNCTION, 
-          'setupproject_download_progress');
+          'curl_show_download_progress');
         curl_setopt($ch, CURLOPT_NOPROGRESS, false);
         $data = curl_exec($ch);
         if($data) {
@@ -186,10 +191,10 @@ EOTEXT
 
     if(is_resource($process)) {
       while($str = fgets($pipes[1])) {
-	if($verbose) {
-	  echo $str;
-	}
-	flush();
+    if ($verbose) {
+      echo $str;
+    }
+    flush();
       }       
       proc_close($process);
     }
@@ -226,29 +231,9 @@ EOTEXT
       return preg_replace('/\.tar\.xz$/i', '', $file); 
     } else {     
       return phutil_console_format(<<<EOTEXT
-	  Source file extension is not supported.
+      Source file extension is not supported.
 EOTEXT
       );      
     }
   }
-}
-
-function setupproject_download_progress($download_size, $downloaded, 
-  $upload_size, $uploaded) {
-  if($download_size > 0) {
-    $percentage = number_format(($downloaded / $download_size) * 100, 2)."%";
-    echo "\r" . setupproject_format_bytes($downloaded) . " downloaded out of " .
-      setupproject_format_bytes($download_size) . " -- " . $percentage;
-  }
-  sleep(1);
-}
-
-function setupproject_format_bytes($bytes, $precision = 2) {
-  $units = array('B', 'KB', 'MB', 'GB', 'TB');    
-  
-  $bytes = max($bytes, 0);
-  $pow = floor(($bytes ? log($bytes, 2) : 0) / log(1024, 2));
-  $pow = min($pow, count($units) - 1);
-  $result = $bytes / pow(1024, $pow);
-  return round($result, $precision).$units[$pow];
 }
