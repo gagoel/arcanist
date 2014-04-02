@@ -14,6 +14,8 @@
  * message.
 */
 
+require_once 'ArcanistUtils.php';
+
 final class ArcanistCloneProjectWorkflow extends ArcanistBaseWorkflow {
     
   public function getWorkflowName() {
@@ -107,43 +109,12 @@ EOTEXT
     $cmd = "git clone " . $project_remote_dir . ".git " . $arg_project;
     echo "Running command " . $cmd . "\n";
     
-    $status = $this->run_command($cmd, $project_local_root_dir, $arg_verbose);
+    $status = run_command($cmd, $project_local_root_dir, $arg_verbose);
     if($status) {
       echo "'" . $arg_project . "' project cloned successfully.\n";
     } else {
       echo "'" . $arg_project . "' project cloning failed.\n";
     }
 
-  }
-
-  private function run_command($command, $execution_directory, $verbose) {
-    $descriptorspec = array(
-      0 => array("pipe", "r"),
-      1 => array("pipe", "w"),
-      2 => array("pipe", "w")
-    );
-
-    $pipes = array();
-    $process = proc_open($command, $descriptorspec, $pipes, 
-      $execution_directory, NULL);
-
-    $return_status = true;
-    if(is_resource($process)) {
-      while($str = fgets($pipes[1])) {
-        if($verbose) {
-          echo $str;
-        }
-        flush();
-      }       
-      while($str = fgets($pipes[2])) {
-        if($verbose) {
-          echo $str;
-        }
-        flush();
-        $return_status = false;
-      }       
-      proc_close($process);
-      return $return_status;
-    }
   }
 }
